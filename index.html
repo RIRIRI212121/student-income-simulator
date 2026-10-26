@@ -6,6 +6,15 @@
 <section class="card"><h2>④ 年収別の手取り比較</h2><div class="tablewrap"><table><thead><tr><th>年収</th><th>所得税等</th><th>住民税（均等割等）</th><th>国保（150万円以上で仮定）</th><th>暫定手取り</th></tr></thead><tbody id="comparison"></tbody></table></div><h3>年収と暫定手取りの推移</h3><svg id="line" viewBox="0 0 760 290" aria-label="年収と手取りの折れ線グラフ"></svg></section>
 <section class="card"><h2>⑤ 年収の比較・分析</h2><div class="row"><div><label for="min">探索開始（万円）</label><input id="min" type="number" value="80"></div><div><label for="max">探索終了（万円）</label><input id="max" type="number" value="250"></div></div><p id="best"></p><p id="extra"></p></section><section class="card"><h2>注意事項</h2><p class="muted">2026年の給与収入を想定した試作版。所得税の控除・税率は簡易仮定であり、正式な税額を再現しません。住民税所得割、勤務先の社会保険料、親の税負担などは計算に含めていません。国保は大阪府の代表料率による軽減なしの概算。150万円を境に国保加入を仮定するのは試算上の便宜であり、実際の加入区分は年収だけでは確定できません。国保は世帯所得による軽減・加入月数など未反映。金融・税務上の判断には公式情報を確認してください。</p></section></main>
 <script>
+ <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V0RD45VB2Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-V0RD45VB2Y');
+</script>
 (function(){
 "use strict";
 const el=id=>document.getElementById(id);
