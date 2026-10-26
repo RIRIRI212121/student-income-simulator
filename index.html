@@ -1,0 +1,217 @@
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>学生の年収の壁・手取りシミュレーター</title><style>
+:root{font-family:system-ui,-apple-system,'Noto Sans JP',sans-serif;color:#15233a;background:#f4f7fb}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1140px;margin:auto;padding:24px}.hero{background:linear-gradient(110deg,#173d71,#246f98);color:white;padding:32px;border-radius:22px;margin-bottom:20px}.hero h1{margin:0 0 8px;font-size:clamp(23px,4vw,34px)}.hero p{margin:0;opacity:.9}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:white;border:1px solid #e0e7f0;border-radius:17px;padding:22px;margin-bottom:16px;box-shadow:0 3px 14px #17294b08}h2{font-size:20px;margin:0 0 18px}h3{font-size:15px;margin:18px 0 10px}.field{margin-bottom:16px}label{display:block;font-size:13px;font-weight:700;margin-bottom:7px;color:#40516a}input,select{width:100%;padding:11px 13px;border:1px solid #cbd6e4;border-radius:10px;background:white;font:inherit;color:inherit}input:focus,select:focus{outline:2px solid #75b8e9}input[type=range]{padding:0;accent-color:#1678b7}small,.muted{color:#64748b;font-size:12px}.note{background:#f0f6ff;border-left:3px solid #3a7dc0;padding:12px;border-radius:7px;font-size:13px;line-height:1.7}.warn{background:#fff7ed;border-left-color:#e4a043}.result{padding:17px;background:#f4f8fc;border-radius:13px}.result .number{font-size:clamp(27px,4vw,39px);font-weight:800;letter-spacing:-1px}.green{color:#138349}.blue{color:#176bb2}.red{color:#c83b47}.moneyrow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e5eaf1}.moneyrow:last-child{border:0}.moneyrow strong{font-variant-numeric:tabular-nums}.pill{font-size:11px;border-radius:30px;padding:3px 9px;background:#e8f2ff;color:#245f94;white-space:nowrap}.searchbox{position:relative}.suggest{position:absolute;z-index:10;top:100%;width:100%;background:white;border:1px solid #cbd6e4;max-height:260px;overflow:auto;border-radius:9px;box-shadow:0 8px 25px #15233a20}.suggest button{display:block;width:100%;padding:10px 13px;text-align:left;background:white;border:0;cursor:pointer}.suggest button:hover{background:#edf6ff}.hidden{display:none}.chart-scroll{overflow-x:auto}.bars{height:330px;min-width:660px;display:flex;align-items:flex-end;gap:12px;padding:40px 12px 60px 42px;position:relative;border-bottom:1px solid #cbd5e1;background:repeating-linear-gradient(to top,transparent 0,transparent 59px,#e7edf4 60px)}.baritem{height:100%;flex:1;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;position:relative;min-width:80px}.bar{width:70%;max-width:75px;flex-shrink:0;border-radius:6px 6px 0 0;min-height:1px;transition:height .25s}.baritem .val{font-size:11px;font-weight:700;white-space:nowrap;margin-bottom:5px}.baritem .lbl{position:absolute;top:calc(100% + 8px);text-align:center;font-size:11px;line-height:1.25;width:100%}.legend{display:flex;gap:15px;flex-wrap:wrap;margin:12px 0;font-size:12px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:13px}th,td{padding:11px 9px;text-align:right;border-bottom:1px solid #e6ecf3}th:first-child,td:first-child{text-align:left}th{background:#f1f5fa}.flex{display:flex;gap:10px;align-items:center;justify-content:space-between}.actions{display:flex;gap:8px;flex-wrap:wrap}button.action{background:#1d659d;color:white;border:0;padding:10px 14px;border-radius:9px;cursor:pointer}.tiny{font-size:12px}.line-svg{width:100%;height:auto;display:block}.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f5f8fc;padding:13px;border-radius:11px}.metric b{display:block;font-size:19px;margin-top:5px}.badge{padding:4px 8px;border-radius:7px;background:#edf2f7;font-size:11px}.foot{line-height:1.8;color:#64748b;font-size:12px;margin:18px 0 40px}@media(max-width:750px){.wrap{padding:12px}.hero{padding:23px}.grid,.split{grid-template-columns:1fr}.card{padding:16px}}
+
+/* Responsive improvements: phone, tablet and desktop */
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{overflow-x:hidden}
+.wrap{width:100%;max-width:1140px}
+.grid>* , .split>*{min-width:0}
+input,select,button{min-height:44px}
+input[type=range]{min-height:32px;touch-action:pan-y}
+button,select{-webkit-tap-highlight-color:transparent}
+.chart-scroll,.tablewrap{-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.chart-scroll{padding-bottom:6px}
+.chart-scroll:focus-visible,.tablewrap:focus-visible{outline:2px solid #1678b7;outline-offset:2px}
+.line-svg{min-width:0;max-width:100%;overflow:visible}
+.moneyrow>span,.moneyrow>div{min-width:0;overflow-wrap:anywhere}
+.moneyrow strong{white-space:nowrap}
+.actions .action{flex-shrink:0}
+@media(min-width:751px) and (max-width:1024px){
+ .wrap{padding:20px}.hero{padding:27px}.card{padding:18px}
+ .grid{gap:12px}.result .number{font-size:clamp(25px,3.2vw,35px)}
+}
+@media(max-width:750px){
+ .wrap{padding:12px}.hero{padding:22px 18px;border-radius:16px;margin-bottom:14px}
+ .hero h1{font-size:clamp(22px,6vw,29px);line-height:1.35}
+ .hero p{font-size:13px;line-height:1.6}
+ .grid{grid-template-columns:minmax(0,1fr);gap:0}
+ .split{grid-template-columns:minmax(0,1fr)}
+ .card{padding:16px;margin-bottom:12px;border-radius:14px}
+ h2{font-size:18px;line-height:1.4;margin-bottom:14px}
+ .result .number{font-size:clamp(27px,8vw,38px);overflow-wrap:anywhere}
+ .bars{min-width:680px}.baritem{min-width:85px}
+ .chart-scroll::after{content:'横にスクロールして全ての壁を確認できます →';display:block;font-size:11px;color:#64748b;margin-top:10px}
+ .tablewrap{border:1px solid #e6ecf3;border-radius:10px}
+ .tablewrap table{min-width:660px}
+ .line-svg{width:100%;height:auto}
+ .moneyrow{align-items:flex-start;font-size:13px}
+ .moneyrow strong{font-size:13px}
+ .actions{gap:8px}.actions .action{flex:1 1 160px}
+ input,select{font-size:16px}
+ .metric b{font-size:18px}
+ .foot{overflow-wrap:anywhere}
+}
+@media(max-width:380px){
+ .wrap{padding:9px}.card{padding:13px}.hero{padding:19px 14px}
+ .hero h1{font-size:21px}.moneyrow{gap:6px}
+ .moneyrow strong{font-size:12px}.badge{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.bar{transition:none}html{scroll-behavior:auto}}
+</style></head><body><main class="wrap"><header class="hero"><h1>学生の年収の壁・手取りシミュレーター</h1><p>年収を動かして、税金・健康保険・扶養の壁と手取りを比較しよう</p></header>
+<div class="grid"><section class="card"><h2>① 基本条件</h2><div class="field"><label for="city">お住まいの市区町村（検索・選択）</label><div class="searchbox"><input id="city" autocomplete="off" placeholder="例：茨木、suita、中央区"><div id="suggest" class="suggest hidden"></div></div><small>自治体名は表示・記録用。税額には全国共通の概算モデルを使用。</small></div><div class="field"><label for="salary">年間給与収入（万円・直接入力可）</label><input id="salary" type="number" min="0" step="0.0001" value="140"><input id="slider" type="range" min="0" max="500" step="1" value="140"></div><div class="split"><div class="field"><label for="student">学生区分</label><select id="student"><option value="day">昼間部の学生</option><option value="night">夜間・通信制等</option><option value="no">学生以外</option></select></div></div><div class="split"><div class="field"><label for="insurance">健康保険の加入区分</label><select id="insurance"><option value="dependent">親の健康保険の扶養</option><option value="nhi">国民健康保険（代表モデル）</option><option value="employer">勤務先の社会保険（未計算）</option><option value="unknown">未判定</option></select></div></div><div class="note warn">このアプリは2026年給与収入に対する参考シミュレーターです。税率・所得控除・保険料の一部は仮定を含み、確定申告・保険料決定に使える正確な計算ではありません。</div></section>
+<section class="card"><h2>② 年収と手取りの概算</h2><div class="result"><small id="result-label">税・保険料差引後（暫定）</small><div id="net" class="number blue">—</div><div id="gross-label" class="muted"></div></div><div id="breakdown"></div><div id="uncertainty" class="note warn" style="margin-top:14px"></div><h3>親の扶養への影響</h3><div id="dependent-info" class="note"></div></section></div>
+<section class="card"><h2>③ 目標年収と各「壁」の縦棒グラフ</h2><div class="legend"><span><i class="dot" style="background:#16a34a"></i>目標年収</span><span><i class="dot" style="background:#64748b"></i>未到達</span><span><i class="dot" style="background:#dc2626"></i>到達済み</span></div><div class="chart-scroll" tabindex="0" role="region" aria-label="年収の壁グラフ（横スクロール可能）"><div id="bars" class="bars"></div></div><h3>各壁までの差額</h3><div id="wall-list"></div><p class="muted">各基準は制度の説明用の概算です。年収だけでは判定できない社会保険加入条件などは、壁の到達だけで自動確定しません。</p></section>
+<section class="card"><h2>④ 年収別の手取り比較</h2><div class="actions"><button class="action" id="addCompare">比較年収を追加</button><button class="action" id="download">比較表をCSV保存</button></div><div id="compare-inputs" class="actions" style="margin:14px 0"></div><div class="tablewrap" tabindex="0" role="region" aria-label="年収別の手取り比較表（横スクロール可能）"><table><thead><tr><th>年収</th><th>所得税</th><th>住民税</th><th>国保</th><th>差引後</th><th>現在との差</th></tr></thead><tbody id="compare-body"></tbody></table></div><h3>年収と手取りの推移</h3><svg id="linechart" class="line-svg" viewBox="0 0 800 300" role="img" aria-label="年収と手取りの折れ線グラフ"></svg></section>
+<section class="card"><h2>⑤ 働き方・最適年収の分析</h2><div class="split"><div class="field"><label for="minIncome">探索開始年収（万円）</label><input id="minIncome" type="number" value="80" min="0"></div><div class="field"><label for="maxIncome">探索終了年収（万円）</label><input id="maxIncome" type="number" value="250" min="0"></div></div><div class="split" id="optimization"></div><div id="efficiency" class="note" style="margin-top:12px"></div><p class="muted">探索間隔は1万円。社会保険の加入条件が不明な場合、最適年収は確定できません。ここでの最適は「入力した保険区分を固定した仮定」に限ります。</p></section>
+<section class="card"><h2>⑥ 詳細・計算条件</h2><details><summary>この試算で使う仮定を表示</summary><div id="assumptions" class="foot"></div></details><p class="note warn">住民税は全国共通の概算基準、国民健康保険料は大阪府の料率を参考にした代表モデルです。全国平均値ではありません。実際の非課税限度額、所得割、均等割、軽減制度、保険料は自治体や世帯所得で異なります。健康保険の扶養は将来の収入見込みなどで判定されます。</p><p class="foot">公式確認先：<a href="https://www.nta.go.jp/" target="_blank" rel="noopener">国税庁</a> ／ <a href="https://www.nenkin.go.jp/" target="_blank" rel="noopener">日本年金機構</a> ／ <a href="https://www.pref.osaka.lg.jp/" target="_blank" rel="noopener">大阪府</a>。個別の税率・適用年度は正式運用前に最新の公式資料で照合してください。</p></section></main>
+<script>
+// 自治体候補。検索の完全な全国網羅には公的自治体コードデータの導入が必要。
+window.CITIES = `北海道|札幌市,函館市,旭川市,釧路市,帯広市,北見市,苫小牧市,小樽市,千歳市
+青森県|青森市,弘前市,八戸市
+岩手県|盛岡市,一関市,奥州市
+宮城県|仙台市,石巻市,大崎市
+秋田県|秋田市,横手市
+山形県|山形市,鶴岡市,酒田市
+福島県|福島市,郡山市,いわき市,会津若松市
+茨城県|水戸市,つくば市,日立市,土浦市,ひたちなか市
+栃木県|宇都宮市,小山市,栃木市
+群馬県|前橋市,高崎市,伊勢崎市,太田市
+埼玉県|さいたま市,川口市,川越市,越谷市,所沢市,草加市,春日部市,上尾市,熊谷市,新座市,狭山市,戸田市,朝霞市
+千葉県|千葉市,船橋市,市川市,松戸市,柏市,市原市,流山市,浦安市,習志野市,八千代市,佐倉市,成田市
+東京都|千代田区,中央区,港区,新宿区,文京区,台東区,墨田区,江東区,品川区,目黒区,大田区,世田谷区,渋谷区,中野区,杉並区,豊島区,北区,荒川区,板橋区,練馬区,足立区,葛飾区,江戸川区,八王子市,町田市,府中市,調布市,立川市,武蔵野市,三鷹市,小金井市,国分寺市,西東京市,多摩市
+神奈川県|横浜市,川崎市,相模原市,横須賀市,藤沢市,茅ヶ崎市,平塚市,厚木市,大和市,海老名市,鎌倉市,小田原市
+新潟県|新潟市,長岡市,上越市
+富山県|富山市,高岡市
+石川県|金沢市,白山市,小松市
+福井県|福井市,坂井市
+山梨県|甲府市,甲斐市
+長野県|長野市,松本市,上田市,飯田市
+岐阜県|岐阜市,大垣市,各務原市,多治見市
+静岡県|静岡市,浜松市,沼津市,富士市,磐田市,藤枝市
+愛知県|名古屋市,豊橋市,岡崎市,一宮市,豊田市,春日井市,安城市,豊川市,刈谷市,小牧市,西尾市,日進市,長久手市
+三重県|津市,四日市市,鈴鹿市,松阪市,桑名市
+滋賀県|大津市,草津市,彦根市,守山市,栗東市,近江八幡市
+京都府|京都市,宇治市,亀岡市,長岡京市,城陽市,京田辺市,八幡市,福知山市,舞鶴市
+大阪府|大阪市,堺市,豊中市,吹田市,高槻市,茨木市,箕面市,池田市,摂津市,守口市,門真市,寝屋川市,枚方市,交野市,大東市,四條畷市,東大阪市,八尾市,柏原市,松原市,羽曳野市,藤井寺市,富田林市,河内長野市,大阪狭山市,和泉市,泉大津市,高石市,岸和田市,貝塚市,泉佐野市,泉南市,阪南市,島本町,豊能町,能勢町,忠岡町,熊取町,田尻町,岬町,太子町,河南町,千早赤阪村
+兵庫県|神戸市,姫路市,尼崎市,西宮市,芦屋市,伊丹市,宝塚市,川西市,三田市,明石市,加古川市,高砂市,三木市,小野市,加西市,西脇市,豊岡市,丹波市,洲本市,淡路市
+奈良県|奈良市,生駒市,橿原市,大和郡山市,天理市,香芝市
+和歌山県|和歌山市,田辺市,橋本市
+鳥取県|鳥取市,米子市,倉吉市
+島根県|松江市,出雲市,浜田市
+岡山県|岡山市,倉敷市,津山市,総社市
+広島県|広島市,福山市,呉市,東広島市,尾道市,廿日市市
+山口県|山口市,下関市,宇部市,周南市,岩国市,防府市
+徳島県|徳島市,阿南市,鳴門市
+香川県|高松市,丸亀市,坂出市
+愛媛県|松山市,今治市,新居浜市,西条市
+高知県|高知市,南国市
+福岡県|福岡市,北九州市,久留米市,飯塚市,大牟田市,春日市,筑紫野市,大野城市,糸島市,宗像市
+佐賀県|佐賀市,唐津市,鳥栖市
+長崎県|長崎市,佐世保市,諫早市,大村市
+熊本県|熊本市,八代市,天草市,合志市
+大分県|大分市,別府市,中津市
+宮崎県|宮崎市,都城市,延岡市
+鹿児島県|鹿児島市,霧島市,鹿屋市,薩摩川内市
+沖縄県|那覇市,沖縄市,浦添市,宜野湾市,うるま市,名護市`.split('\n').flatMap(line=>{const [pref,raw]=line.split('|');return raw.split(',').map(name=>({pref,name,id:pref+' '+name}))});
+window.CITY_ALIASES={'茨木市':'いばらきし ibaraki','吹田市':'すいたし suita','大阪市':'おおさかし osaka','豊中市':'とよなかし toy onaka toyonaka','箕面市':'みのおし minoh','京都市':'きょうとし kyoto','神戸市':'こうべし kobe','名古屋市':'なごやし nagoya','横浜市':'よこはまし yokohama','札幌市':'さっぽろし sapporo','福岡市':'ふくおかし fukuoka','尼崎市':'あまがさきし amagasaki','豊橋市':'とよはしし toyohashi','東京都':'とうきょうと tokyo'};
+
+</script><script>
+'use strict';
+// 参考モデルであり税務・保険料の確定計算ではありません。
+const $=id=>document.getElementById(id);
+const yen=n=>Math.round(n).toLocaleString('ja-JP')+'円';
+const safe=n=>Math.max(0,Number(n)||0);
+const fmtMan=n=>(n/10000).toLocaleString('ja-JP',{maximumFractionDigits:4})+'万円';
+const params={salary:1400000,age:20,student:'day',insurance:'dependent'};
+let comparisons=[1200000,1300000,1400000,1500000,1600000,1800000,2000000];
+let chosenCity='大阪府 茨木市';
+// 2026年の収入・翌年度住民税についての簡略仮定。制度改正・自治体差は未反映。
+const RULES={salaryDeductionMinimum:740000,incomeBasicDeduction:1040000,residentBasicDeduction:430000,studentIncomeDeduction:270000,studentResidentDeduction:260000,studentMaxSalary:1630000,residentExemptionSalary:1190000,residentFlat:5000,residentRate:.10,adjustmentCredit:2500,incomeRate:.05,restoration:.021,healthDependentYoung:1500000,healthDependentOther:1300000};
+function calcIncomeTax(s,student){
+ const income=Math.max(0,s-RULES.salaryDeductionMinimum);
+ const deduction=RULES.incomeBasicDeduction+(student&&s<=RULES.studentMaxSalary?RULES.studentIncomeDeduction:0);
+ const taxable=Math.floor(Math.max(0,income-deduction)/1000)*1000;
+ const brackets=[[1950000,.05,0],[3300000,.10,97500],[6950000,.20,427500],[9000000,.23,636000],[18000000,.33,1536000],[40000000,.40,2796000],[Infinity,.45,4796000]];
+ const [_,rate,subtract]=brackets.find(([max])=>taxable<=max);
+ const base=Math.floor(Math.max(0,taxable*rate-subtract)/100)*100;
+ return {income:base,restoration:Math.floor(base*RULES.restoration),taxable};
+}
+function calcResident(s,student,age){
+ const income=Math.max(0,s-RULES.salaryDeductionMinimum);
+ const exempt=s<=RULES.residentExemptionSalary||(age<18&&income<=1350000);
+ if(exempt)return {income:0,flat:0,total:0};
+ const deduction=RULES.residentBasicDeduction+(student&&s<=RULES.studentMaxSalary?RULES.studentResidentDeduction:0);
+ const taxable=Math.floor(Math.max(0,income-deduction)/1000)*1000;
+ const incomeTax=Math.floor(Math.max(0,taxable*RULES.residentRate-RULES.adjustmentCredit)/100)*100;
+ // 所得割が0円でも均等割・森林環境税は発生し得る。ここでは単純な代表値。
+ return {income:incomeTax,flat:RULES.residentFlat,total:incomeTax+RULES.residentFlat};
+}
+function calcNhi(s,age){
+ // 2026大阪府の公表料率を参考にした概算。軽減は世帯情報が必要なため適用しない。
+ const income=Math.max(0,s-RULES.salaryDeductionMinimum);
+ const base=Math.max(0,income-430000);
+ const medical=base*.095+34990+33908;
+ const support=base*.0306+11191+10845;
+ const child=base*.0028+1841;
+ const care=age>=40&&age<=64?base*.026+18682:0;
+ return {medical:Math.round(medical),support:Math.round(support),child:Math.round(child),care:Math.round(care),total:Math.round(medical+support+child+care)};
+}
+function calc(s,options=params){
+ s=safe(s);const student=options.student!=='no';
+ const inc=calcIncomeTax(s,student),res=calcResident(s,student,options.age);
+ const nhi=options.insurance==='nhi'?calcNhi(s,options.age):null;
+ const healthWall=options.age>=19&&options.age<=22?RULES.healthDependentYoung:RULES.healthDependentOther;
+ const dependentRisk=options.insurance==='dependent'&&s>=healthWall;
+ const missing=options.insurance==='employer'||options.insurance==='unknown'||dependentRisk;
+ const taxes=inc.income+inc.restoration+res.total;
+ const deducted=taxes+(nhi?.total||0);
+ return {s,inc,res,nhi,taxes,deducted,net:s-deducted,missing,dependentRisk,healthWall};
+}
+function getWalls(){const young=params.age>=19&&params.age<=22;return [
+ {name:'住民税の壁',amount:1190000,detail:'均等割非課税の代表基準。自治体差あり'},
+ {name:'健康保険の扶養',amount:young?1500000:1300000,detail:'年収見込みや生計維持なども必要'},
+ {name:'親の税控除の変化',amount:young?1590000:1230000,detail:'年齢・所得・適用年度によって異なる'},
+ ...(params.student==='no'?[]:[{name:'勤労学生控除',amount:1630000,detail:'控除の所得要件の参考値'}]),
+ {name:'本人の所得税',amount:1780000,detail:'給与のみ・特定控除なしの参考値'}
+ ];}
+function renderResult(){const r=calc(params.salary);const clean=r.deducted===0&&!r.missing;
+ $('result-label').textContent=r.missing?'計算済み項目だけを差し引いた暫定額':clean?'税・保険料の計算上の負担なし':'税・保険料差引後の概算';
+ $('net').textContent=yen(r.net);$('net').className='number '+(clean?'green':'blue');
+ $('gross-label').textContent='額面年収 '+yen(params.salary)+' ／ 月額換算 '+yen(r.net/12);
+ const rows=[['所得税',r.inc.income],['復興特別所得税',r.inc.restoration],['住民税・所得割',r.res.income],['住民税・均等割等',r.res.flat]];
+ if(r.nhi)rows.push(['国保・医療分',r.nhi.medical],['国保・支援金分',r.nhi.support],['国保・子育て支援金分',r.nhi.child],['国保・介護分',r.nhi.care]);
+ $('breakdown').innerHTML=rows.map(([label,n])=>`<div class="moneyrow"><span>${label}</span><strong class="red">−${yen(n)}</strong></div>`).join('')+`<div class="moneyrow"><strong>計算済み負担の合計</strong><strong class="red">−${yen(r.deducted)}</strong></div>`;
+ $('uncertainty').textContent=r.missing?'勤務先の社会保険料または扶養喪失後の保険料は未計算です。表示額は最終手取りではありません。':r.nhi?'国保は低所得世帯軽減や世帯主所得、自治体差を反映していません。実際の額と大きく異なる可能性があります。':'所得税・住民税は概算。健康保険の扶養条件と国民年金の納付状況などは別途確認が必要です。';
+ $('dependent-info').textContent=(r.dependentRisk?'親の健康保険の収入基準に達しています。扶養から外れる可能性があり、加入先の確認が必要です。':'親の健康保険の収入基準（年齢による代表値）は '+yen(r.healthWall)+' です。収入見込み等による別途審査があります。')+' 親の所得税・住民税の増減は、親の所得情報がないため未計算です。';
+}
+function renderBars(){const walls=getWalls(),list=[{name:'目標年収',amount:params.salary},...walls],max=Math.max(2000000,Math.ceil(params.salary/500000)*500000);
+ $('bars').innerHTML=list.map((w,i)=>{const color=i===0?'#16a34a':params.salary>=w.amount?'#dc2626':'#64748b';const height=Math.max(2,Math.min(220,Math.round(w.amount/max*220)));return `<div class="baritem"><div class="val">${fmtMan(w.amount)}</div><div class="bar" style="height:${height}px;background:${color}"></div><div class="lbl">${w.name}</div></div>`}).join('');
+ $('wall-list').innerHTML=walls.map(w=>`<div class="moneyrow"><div><strong>${w.name}</strong><br><small>${w.detail}</small></div><div style="text-align:right"><strong class="${params.salary>=w.amount?'red':''}">${params.salary>=w.amount?'到達済み':'あと '+yen(w.amount-params.salary)}</strong><br><small>${yen(w.amount)}${params.salary>=w.amount?' ／ '+yen(params.salary-w.amount)+'超過':''}</small></div></div>`).join('');}
+function renderCompare(){
+ $('compare-inputs').innerHTML=comparisons.map((n,i)=>`<span class="badge">${fmtMan(n)} <button data-remove="${i}" aria-label="比較を削除" style="border:0;background:transparent;cursor:pointer">×</button></span>`).join('');
+ const base=calc(params.salary);
+ $('compare-body').innerHTML=[...new Set([params.salary,...comparisons])].sort((a,b)=>a-b).map(s=>{const r=calc(s);return `<tr><td>${yen(s)}${s===params.salary?' <b>現在</b>':''}</td><td class="red">${yen(r.inc.income+r.inc.restoration)}</td><td class="red">${yen(r.res.total)}</td><td class="red">${r.nhi?yen(r.nhi.total):r.missing?'未計算':'0円'}</td><td><b>${yen(r.net)}${r.missing?' ※':''}</b></td><td class="${r.net>=base.net?'green':'red'}">${r.net>=base.net?'+':''}${yen(r.net-base.net)}</td></tr>`}).join('');
+ document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{comparisons.splice(Number(b.dataset.remove),1);renderCompare()});
+ renderLine();
+}
+function renderLine(){const svg=$('linechart'),w=800,h=300,p=45,min=800000,max=2500000;const points=[];for(let s=min;s<=max;s+=20000)points.push({s,net:calc(s).net});
+ const maxY=Math.max(max,...points.map(x=>x.net));const x=s=>p+(s-min)/(max-min)*(w-2*p),y=v=>h-p-v/maxY*(h-2*p);
+ let content='';for(let i=0;i<=4;i++){let yy=y(maxY*i/4);content+=`<line x1="${p}" x2="${w-p}" y1="${yy}" y2="${yy}" stroke="#e2e8f0"/><text x="${p-6}" y="${yy+4}" text-anchor="end" font-size="11" fill="#64748b">${Math.round(maxY*i/4/10000)}万</text>`}
+ const grossPoints=points.map(o=>`${x(o.s)},${y(o.s)}`).join(' '),netPoints=points.map(o=>`${x(o.s)},${y(o.net)}`).join(' ');
+ content+=`<polyline fill="none" stroke="#94a3b8" stroke-width="2" points="${grossPoints}"/><polyline fill="none" stroke="#1976b7" stroke-width="3" points="${netPoints}"/>`;
+ getWalls().forEach(o=>{if(o.amount>=min&&o.amount<=max)content+=`<line x1="${x(o.amount)}" x2="${x(o.amount)}" y1="${p}" y2="${h-p}" stroke="#d97706" stroke-dasharray="3 5" opacity=".5"/>`});
+ [800000,1200000,1600000,2000000,2400000].forEach(s=>content+=`<text x="${x(s)}" y="${h-15}" text-anchor="middle" font-size="12" fill="#64748b">${s/10000}万</text>`);
+ content+=`<text x="${w-12}" y="25" text-anchor="end" font-size="12" fill="#1976b7">━━ 手取り</text><text x="${w-110}" y="25" text-anchor="end" font-size="12" fill="#64748b">━━ 額面</text>`;
+ svg.innerHTML=content;
+}
+function renderOptimization(){let low=Math.round(safe($('minIncome').value)*10000),high=Math.round(safe($('maxIncome').value)*10000);if(high<=low||high-low>10000000){$('optimization').innerHTML='<p>探索範囲を正しく入力してください。</p>';$('efficiency').textContent='';return}
+ let best=null,eff=null;for(let s=low;s<=high;s+=10000){const r=calc(s);if(!best||r.net>best.net)best={s,net:r.net};if(s+100000<=high){const end=calc(s+100000),delta=end.net-r.net,rate=delta/100000;if(!eff||rate>eff.rate)eff={s,delta,rate}}}
+ $('optimization').innerHTML=`<div class="metric"><small>範囲内で手取り最大</small><b>${yen(best.s)}</b><small>暫定手取り ${yen(best.net)}</small></div><div class="metric"><small>追加10万円の効率が最大</small><b>${yen(eff?.s??low)}付近</b><small>手取り増加率 ${eff?(eff.rate*100).toFixed(1)+'%':'比較不可'}</small></div>`;
+ const target=calc(params.salary+100000),now=calc(params.salary),delta=target.net-now.net;
+ $('efficiency').innerHTML=`今より<strong>10万円</strong>多く稼ぐと、計算済み項目に基づく手取り増加は<strong>${yen(delta)}</strong>。手取り増加率<strong>${(delta/1000).toFixed(1)}%</strong>。${now.missing||target.missing?' 保険料が未計算のため、この結果は参考値です。':''}`;
+}
+function render(){params.salary=Math.round(safe($('salary').value)*10000);params.student=$('student').value;params.insurance=$('insurance').value;$('slider').value=Math.min(params.salary/10000,500);renderResult();renderBars();renderCompare();renderOptimization()}
+const norm=s=>String(s).normalize('NFKC').toLowerCase().replace(/\s/g,'');
+function searchCities(query){const q=norm(query);if(!q)return[];return window.CITIES.filter(c=>norm(c.id+' '+(window.CITY_ALIASES[c.name]||'')).includes(q)).slice(0,20)}
+$('city').value=chosenCity;
+$('city').addEventListener('input',e=>{const matches=searchCities(e.target.value),panel=$('suggest');panel.classList.toggle('hidden',!e.target.value);panel.innerHTML=matches.length?matches.map((c,i)=>`<button type="button" data-city="${i}">${c.pref} ${c.name}</button>`).join(''):'<div style="padding:12px">候補なし（未収録の自治体があります）</div>';panel.querySelectorAll('button').forEach(b=>b.onclick=()=>{const c=matches[Number(b.dataset.city)];chosenCity=c.id;$('city').value=chosenCity;panel.classList.add('hidden')})});
+$('city').addEventListener('keydown',e=>{if(e.key==='Enter'){const m=searchCities($('city').value);if(m.length){chosenCity=m[0].id;$('city').value=chosenCity;$('suggest').classList.add('hidden')}}});
+document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))$('suggest').classList.add('hidden')});
+['salary','student','insurance','minIncome','maxIncome'].forEach(id=>$(id).addEventListener('input',render));
+$('slider').addEventListener('input',e=>{$('salary').value=e.target.value;render()});
+$('addCompare').onclick=()=>{const s=prompt('比較する年収を万円で入力してください','170');if(s!==null&&Number.isFinite(Number(s))&&Number(s)>=0){comparisons.push(Math.round(Number(s)*10000));renderCompare()}};
+$('download').onclick=()=>{const base=calc(params.salary),rows=[['年収','所得税','住民税','国民健康保険料','暫定手取り','現在との差'],...[...new Set([params.salary,...comparisons])].sort((a,b)=>a-b).map(s=>{const r=calc(s);return [s,r.inc.income+r.inc.restoration,r.res.total,r.nhi?.total??(r.missing?'未計算':0),r.net,r.net-base.net]})];const csv='\uFEFF'+rows.map(r=>r.join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='年収比較.csv';a.click();URL.revokeObjectURL(url)};
+$('assumptions').innerHTML=`<p>所得税：給与所得控除の最低保障額 ${yen(RULES.salaryDeductionMinimum)}、基礎控除 ${yen(RULES.incomeBasicDeduction)}、勤労学生控除 ${yen(RULES.studentIncomeDeduction)}を仮定。実際には所得・適用年度で変化する。</p><p>住民税：非課税の代表上限 ${yen(RULES.residentExemptionSalary)}、基礎控除 ${yen(RULES.residentBasicDeduction)}、所得割10%、均等割等 ${yen(RULES.residentFlat)}、調整控除を簡略化。所得割非課税判定などは完全再現していない。</p><p>国保：2026年度大阪府の代表料率を参考に、単身1人・12か月加入、低所得軽減なしで試算。保険料率・限度額・軽減制度・加入月数は簡略化している。</p><p>健康保険の扶養は将来の収入見込みで判定されるため、年間給与だけで確定できない。勤務先保険・国民年金・親の税額は別途確認が必要。</p><p>市区町村の検索候補は全国の主要都市と大阪府全市町村を中心に収録したもので、全国全自治体ではない。読み検索は代表的な都市のみ対応。</p>`;
+render();
+
+</script></body></html>
